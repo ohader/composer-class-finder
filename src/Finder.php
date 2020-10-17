@@ -43,9 +43,15 @@ class Finder
                 || !zend_loader_file_encoded());
         if ($useStaticLoader) {
             $className = self::resolvePotentialComposerClassName($composerDirectory . '/autoload_static.php');
-            $target->prefixLengthsPsr4 = $className::$prefixLengthsPsr4;
-            $target->prefixDirsPsr4 = $className::$prefixDirsPsr4;
-            $target->classMap = $className::$classMap;
+            if (isset($className::$prefixLengthsPsr4)) {
+                $target->prefixLengthsPsr4 = $className::$prefixLengthsPsr4;
+            }
+            if (isset($className::$prefixDirsPsr4)) {
+                $target->prefixDirsPsr4 = $className::$prefixDirsPsr4;
+            }
+            if (isset($className::$classMap)) {
+                $target->classMap = $className::$classMap;
+            }
             return $target;
         }
 
@@ -69,17 +75,17 @@ class Finder
 
     private static function resolvePotentialComposerClassName(string $fileName): string
     {
+        // resolve by actually loading file into memory and compare loaded classes
+        $currentClasses = get_declared_classes();
+        require_once $fileName;
+        $newClasses = array_diff(get_declared_classes(), $currentClasses);
+        if (count($newClasses) === 1) {
+            return array_shift($newClasses);
+        }
         $fileContent = file_get_contents($fileName);
         // resolve by searching for first `class` declaration in file
         if (preg_match('#^class\s+(?<className>Composer[a-zA-Z0-9]+)#m', $fileContent, $matches)) {
             return 'Composer\\Autoload\\' . $matches['className'];
-        }
-        // resolve by actually loading file into memory and compare loaded classes
-        $currentClasses = get_declared_classes();
-        require $fileName;
-        $newClasses = array_diff(get_declared_classes(), $currentClasses);
-        if (count($newClasses) === 1) {
-            return array_shift($newClasses);
         }
         throw new Exception\ResolvingException(
             'Could not determine composer class declaration',
