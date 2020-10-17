@@ -1,7 +1,7 @@
 # Composer Class Finder
 
-Resolves class files based on Composer autoload information, without actually
-applying autoloader in PHP process. The scope of this package is to retrieve
+State-agnostic class files finder, based on Composer autoload information, without
+actually applying autoloader in PHP process. The scope of this package is to retrieve
 the file location for classes of particular Composer-based projects.
 
 This way classes can be resolved *standalone* without actually loading them
