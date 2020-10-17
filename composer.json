@@ -2,6 +2,7 @@
     "name": "oliver-hader/composer-class-finder",
     "description": "Resolves class files based on Composer autoload information, without actually applying autoloader in PHP process.",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Oliver Hader",
