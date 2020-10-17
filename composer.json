@@ -1,0 +1,30 @@
+{
+    "name": "oliver-hader/composer-class-finder",
+    "description": "Resolves class files based on Composer autoload information, without actually applying autoloader in PHP process.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Oliver Hader",
+            "email": "oliver@typo3.org"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OliverHader\\ComposerClassFinder\\": "src/"
+        },
+        "classmap": [
+            "simulate/TYPO3/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OliverHader\\ComposerClassFinder\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    }
+}
